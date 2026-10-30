@@ -796,7 +796,7 @@ document.addEventListener("securitypolicyviolation", e => { if(/frame/.test(e.vi
 
 /* ---------- Programas ---------- */
 const PROGRAMS = [
-  {"n":"Auxilios educativo-escolares","e":"colaboradores","l":"Educación","d":"Auxilios económicos para cubrir gastos escolares y promover la permanencia educativa de los hijos de los colaboradores en primaria y secundaria.","who":"Hijos de trabajadores directos","where":false,"freq":"2 veces al año (inicio de calendario A y B)","res":"Contribuye a la permanencia escolar y al acceso a recursos necesarios para el desarrollo académico."},
+  {"n":"Auxilios educativo-escolares","e":"colaboradores","l":"Educación","d":"Auxilios económicos para cubrir gastos escolares y promover la permanencia educativa de los hijos de los colaboradores en primaria y secundaria.","who":"Hijos de trabajadores directos","where":false,"freq":"Se entrega 2 veces al año (inicio de calendario A y B)","res":"Contribuye a la permanencia escolar y al acceso a recursos necesarios para el desarrollo académico."},
   {"n":"Auxilio de educación superior","e":"colaboradores","l":"Educación","d":"Apoyo económico para el acceso y la continuidad de estudios de educación superior, incluidos programas universitarios y de formación avanzada.","who":"Trabajadores directos e hijos de trabajadores directos","where":false,"freq":"Dos veces al año (primer y segundo semestre)","res":"Favorece la continuidad de la formación académica y fortalece las oportunidades de desarrollo profesional y crecimiento personal."},
   {"n":"Programa de formación y desarrollo para colaboradores","e":"colaboradores","l":"Educación","d":"Espacios de formación que fortalecen las habilidades personales y profesionales de los colaboradores, a través del Club de Liderazgo y la formación en inteligencia artificial.","who":"Colaboradores","comp":["Club de Liderazgo: liderazgo, comunicación efectiva, gestión de equipos y manejo del estrés en entornos de alta presión","Formación en inteligencia artificial"],"where":"Country Club","freq":"Una vez al año","res":"Fortalece habilidades personales y profesionales aplicables al liderazgo, el trabajo en equipo, la gestión de situaciones laborales y el uso de la inteligencia artificial en el trabajo."},
   {"n":"Subsidio para adquisición de vivienda nueva","e":"colaboradores","l":"Vivienda","d":"Apoyo económico para adquirir una vivienda nueva, contribuyendo a una solución habitacional digna y a la estabilidad familiar.","who":"Trabajadores directos","where":false,"freq":"Convocatoria abierta todo el año · se otorga una única vez","res":"Facilita el acceso a vivienda propia y contribuye al bienestar y estabilidad de los hogares."},
@@ -841,13 +841,13 @@ function progCard(p, i){
             ${p.who ? '<div><dt>A quién beneficia</dt><dd>' + esc(p.who) + '</dd></div>' : ''}
             ${p.comp ? '<div><dt>Componentes</dt><dd>' + listHTML(p.comp) + '</dd></div>' : ''}
             ${p.where === false ? '' : '<div><dt>Dónde</dt><dd>' + (p.where ? esc(p.where) : 'Por confirmar') + '</dd></div>'}
-            ${p.freq ? '<div><dt>Frecuencia</dt><dd>' + esc(p.freq) + '</dd></div>' : ''}
             ${p.note ? '<div><dt>Nota</dt><dd>' + esc(p.note) + '</dd></div>' : ''}
             ${p.res ? '<div><dt>Resultados</dt><dd>' + listHTML(p.res) + '</dd></div>' : ''}
+            ${p.freq ? '<div><dt>Frecuencia</dt><dd>' + esc(p.freq) + '</dd></div>' : ''}
             <div class="pdl-cta"><button type="button" class="cta" data-enroll="${esc(p.n)}">${esc(enrollLabel(p.n))} <span class="arr" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"/><path d="m13 5 7 7-7 7"/></svg></span></button></div>
           </div></dl>
         </div>
-        <div class="foot"><small>${p.freq ? esc(p.freq) : ''}</small><span class="more"><span class="more-t">Más información</span> <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></i></span></div>
+        <div class="foot"><small>${p.freq ? esc(p.freq) : ''}</small><span class="more"><span class="more-t">Más información</span> <i><svg class="m-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg><svg class="m-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></i></span></div>
       </div>
     </article>`;
 }

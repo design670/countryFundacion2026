@@ -669,8 +669,9 @@ main .stats p.stats-lead{font-size:clamp(1rem,1.3vw,1.2rem)}
 .prog.open p{-webkit-line-clamp:unset}
 .prog dt{font-size:.8rem;font-weight:700;color:#16313F}
 .prog dd{margin:2px 0 0;font-size:.94rem;line-height:1.35;color:rgba(22,49,63,.75)}
-.prog.open .more i svg{transform:rotate(90deg)}
-.prog .more i svg{transition:transform .4s}
+.prog .more i .m-x,.prog.open .more i .m-go{display:none}
+.prog.open .more i .m-x{display:block;animation:mxIn .4s cubic-bezier(.4,0,.2,1)}
+@keyframes mxIn{from{transform:rotate(-90deg) scale(.6);opacity:0}to{transform:none;opacity:1}}
 .prog{cursor:pointer}
 .story-f{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-wrap:wrap;gap:6px}
 .story-f li{font-size:.8rem;padding:6px 11px;border-radius:999px;background:rgba(22,49,63,.07);color:#16313F}
@@ -1765,18 +1766,19 @@ body.jm-lock{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.jm-back,.jm-box,.job,.job-go i{transition:none}}
 /* Menú: todo visible en el primer pantallazo y títulos en una sola línea (se ajusta al alto de la ventana) */
 @media (min-width:901px){
-  .mm-grid{padding-top:clamp(122px,18.5vh,190px)!important;padding-bottom:clamp(14px,2.4vh,28px)!important;gap:clamp(28px,4vw,72px)}
+  .mm-grid{padding-top:clamp(160px,22vh,220px)!important;padding-bottom:clamp(14px,2.4vh,28px)!important;gap:clamp(28px,4vw,72px)}
   .mm-links{gap:clamp(12px,2.8vh,34px) clamp(24px,3vw,48px)}
   .mm-group{gap:clamp(4px,.9vh,8px)}
   .mm-group > a{font-size:clamp(1.15rem,min(2.15vw,3.9vh),2.15rem);white-space:nowrap}
   .mm-group .subs{gap:clamp(1px,.45vh,4px);margin-top:clamp(0px,.4vh,4px)}
   .mm-group .subs a{font-size:clamp(.8rem,1.95vh,1rem);white-space:nowrap}
-  .mm-card .gen{aspect-ratio:auto;height:clamp(150px,36vh,340px)}
+  .mm-card .gen{aspect-ratio:auto;height:clamp(140px,32vh,340px)}
 }
 @media (min-width:901px){.mm-group.mm-col2{grid-column:2}}
 
 /* ============ Programas: botón de inscripción en la ficha ============ */
 .pdl-cta{margin-top:6px}
+.prog.open .foot small{visibility:hidden}
 .pdl-cta .cta{--cta-bg:#16313F;--cta-ink:#FFFFFF;--cta-hover:#FFFFFF;--cta-hover-ink:#16313F;height:48px;padding:0 18px;font-size:.78rem;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.5)}
 #enrollModal .ct-want{border:0;padding:0;margin:0;min-width:0}
 #enrollModal .ct-want legend{font-weight:700;padding:0;margin-bottom:10px;color:#16313F}

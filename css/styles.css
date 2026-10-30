@@ -1259,7 +1259,7 @@ main section.pshop{padding-top:clamp(20px,3vh,40px)!important}
 .res-sec .brush-frame > .gen{min-height:0!important;height:100%}
 /* Resultados destacados: grupos Colaboradores / Comunidad */
 .res-group + .res-group{margin-top:clamp(18px,3vh,28px)}
-.res-group h3{margin:0 0 10px;font-size:clamp(1.05rem,1.4vw,1.25rem);color:var(--em,var(--green))}
+.res-group h3{margin:0 0 10px;font-size:clamp(1.05rem,1.4vw,1.25rem);color:var(--navy)}
 .res-group .results{gap:8px}
 /* Listas más compactas para que la sección quepa en una pantalla */
 main .res-group .results li{font-size:clamp(1rem,1.25vw,1.2rem);line-height:1.4;max-width:none}
@@ -1883,6 +1883,11 @@ main .bol-d-text p.lead{margin:0;max-width:46ch}
 .inf-dl svg{width:18px;height:18px}
 .inf-card:hover .inf-dl i{transform:translateY(3px)}
 @media (max-width:900px){.inf-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Impacto: los 3 informes más recientes dentro de la banda azul */
+.inf-band .inf-latest{flex:1 0 100%;order:3}
+.inf-band .inf-more{order:2;align-self:flex-end}
+.inf-band .inf-card{background:#FFFFFF;color:#16313F}
+@media (max-width:900px){.inf-band .inf-latest{grid-template-columns:1fr;order:2}.inf-band .inf-more{order:3}}
 @media (max-width:560px){.inf-cards{grid-template-columns:1fr}.inf-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}.inf-chips button{flex:none}}
 .doc h3{font-size:clamp(1.15rem,1.7vw,1.6rem)}
 .doc .job-go i svg{width:22px;height:22px}

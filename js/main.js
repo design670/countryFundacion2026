@@ -579,26 +579,27 @@ document.addEventListener("securitypolicyviolation", e => { if(/frame/.test(e.vi
 })();
 
 /* ---------- Gestión de informes: tarjetas de documentos con filtro por tipo (contenido de ejemplo) ---------- */
-/* PROGRAMADOR: cada documento tiene "f" (ruta del archivo PDF). Hoy están vacíos: poner la ruta real de cada archivo. */
+/* PROGRAMADOR: cada documento tiene "fecha" (p. ej. "Marzo 2026") y "f" (ruta del archivo PDF). Las fechas son de ejemplo y las rutas están vacías: poner la fecha y el archivo reales.
+   Ordenar los documentos del más reciente al más antiguo: los 3 primeros se muestran en la banda "Gestión de informes" de Impacto. */
 (function(){
-  const box = document.getElementById("infList"), chips = document.getElementById("infChips"); if(!box || !chips) return;
+  const box = document.getElementById("infList"), chips = document.getElementById("infChips"), latest = document.getElementById("infLatest"); if(!box || !chips) return;
   const GROUPS = [
     {t:"Informes de gestión", docs:[
-      {t:"Informe de gestión", f:""}
+      {t:"Informe de gestión", fecha:"Marzo 2026", f:""}
     ]},
     {t:"Estados financieros", docs:[
-      {t:"Estados financieros", f:""},
-      {t:"Dictamen del revisor fiscal", f:""}
+      {t:"Estados financieros", fecha:"Febrero 2026", f:""},
+      {t:"Dictamen del revisor fiscal", fecha:"Febrero 2026", f:""}
     ]},
     {t:"Régimen tributario especial", docs:[
-      {t:"Certificación de requisitos y cargos directivos", f:""},
-      {t:"Acta de la asamblea ordinaria", f:""}
+      {t:"Certificación de requisitos y cargos directivos", fecha:"Enero 2026", f:""},
+      {t:"Acta de la asamblea ordinaria", fecha:"Diciembre 2025", f:""}
     ]},
     {t:"Documentos institucionales", docs:[
-      {t:"Estatutos de la Fundación", f:""},
-      {t:"Certificado de existencia y representación legal", f:""},
-      {t:"Registro Único Tributario (RUT)", f:""},
-      {t:"Política de tratamiento de datos personales", f:""}
+      {t:"Estatutos de la Fundación", fecha:"Agosto 2025", f:""},
+      {t:"Certificado de existencia y representación legal", fecha:"Junio 2025", f:""},
+      {t:"Registro Único Tributario (RUT)", fecha:"Abril 2025", f:""},
+      {t:"Política de tratamiento de datos personales", fecha:"Noviembre 2024", f:""}
     ]}
   ];
   const DOCS = GROUPS.flatMap(g => g.docs.map(d => ({...d, c:g.t})));
@@ -608,18 +609,20 @@ document.addEventListener("securitypolicyviolation", e => { if(/frame/.test(e.vi
   let cur = "todos";
   chips.innerHTML = [{k:"todos", t:"Todos"}].concat(GROUPS.map(g => ({k:g.t, t:g.t}))).map(c =>
     '<button type="button" data-k="' + h(c.k) + '" aria-pressed="false">' + h(c.t) + '</button>').join("");
-  function render(){
-    box.innerHTML = DOCS.filter(d => cur === "todos" || d.c === cur).map(d =>
+  const card = d =>
       '<a class="inf-card" href="' + (d.f ? h(d.f) : "#informes") + '"' + (d.f ? ' download target="_blank" rel="noopener"' : '') + ' aria-label="Descargar ' + h(d.t) + ' (PDF)">' +
         '<span class="inf-ic">' + pdf + '</span>' +
-        '<span class="inf-cat">' + h(d.c) + '</span>' +
+        (d.fecha ? '<span class="inf-cat">' + h(d.fecha) + '</span>' : '<span class="pending">Fecha por confirmar</span>') +
         '<h3>' + h(d.t) + '</h3>' +
         '<span class="inf-dl">Descargar PDF <i>' + dl + '</i></span>' +
-      '</a>').join("");
+      '</a>';
+  function render(){
+    box.innerHTML = DOCS.filter(d => cur === "todos" || d.c === cur).map(card).join("");
     [...chips.children].forEach(b => b.setAttribute("aria-pressed", String(b.dataset.k === cur)));
   }
   chips.addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; cur = b.dataset.k; render(); });
   render();
+  if(latest) latest.innerHTML = DOCS.slice(0, 3).map(card).join("");
 })();
 
 

@@ -1923,15 +1923,16 @@ main [data-page="informes"] h2.inf-year.long{font-size:clamp(1.9rem,3.4vw,3.1rem
 /* ============ Quiénes somos: línea de tiempo como carrusel en celular ============ */
 @media (max-width:760px){
   .tlx.static .tlx-pin{padding:clamp(70px,10vh,90px) 0 clamp(60px,9vh,80px);gap:clamp(24px,4vh,36px)}
-  .tlx.static .tlx-track{flex-direction:row;align-items:stretch;gap:16px;width:auto;margin-left:0;border-left:0;padding:0 8vw 6px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .tlx.static .tlx-track{flex-direction:row;align-items:flex-start;transition:height .4s cubic-bezier(.4,0,.2,1);gap:16px;width:auto;margin-left:0;border-left:0;padding:0 8vw 6px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .tlx.static .tlx-track::-webkit-scrollbar{display:none}
   .tlx.static .tlx-item,.tlx.static .tlx-end{flex:0 0 84vw;width:84vw;max-width:none;scroll-snap-align:center;align-content:start}
   .tlx.static .tlx-node{display:none}
-  .tlx.static .tlx-year{margin-bottom:14px}
-  .tlx.static .tlx-body{grid-template-columns:1fr;gap:18px}
-  .tlx.static .tlx-photo{max-width:none;width:100%;aspect-ratio:4/3;transform:none!important}
+  .tlx.static .tlx-year{margin-bottom:8px}
+  .tlx.static .tlx-body{grid-template-columns:1fr;gap:14px}
+  .tlx.static .tlx-photo{max-width:none;width:100%;aspect-ratio:16/10;transform:none!important}
+  .tlx.static .tlx-text{padding-top:10px}
   .tlx.static .tlx-end{align-content:center;justify-items:start}
-  .tlx .stack-dots{margin-top:26px}
+  .tlx .stack-dots{margin-top:-6px}
 }
 
 /* ============ Quiénes somos: valores como carrusel en celular ============ */
@@ -2013,4 +2014,63 @@ footer.site .fbottom{justify-content:center;text-align:center}
   /* arriba siempre más que el alto del menú (≈70px) para que ningún título quede pegado o tapado en pantallas bajas como las de un MacBook */
   main section.block:not(.pshop):not(.bol-detail){padding-top:clamp(100px,12vh,128px)!important;padding-bottom:clamp(72px,9vh,104px)!important}
   html{scroll-snap-type:none}
+}
+
+/* ============ Sé parte: Dona, Sé voluntario y Haz una alianza como carrusel solo en celular ============ */
+.sp-carwrap,.sp-car{display:contents}
+.sp-tabs{display:none}
+@media (max-width:760px){
+  .sp-tabs{position:sticky;top:64px;z-index:5;display:flex;gap:6px;padding:12px 16px;background:var(--bg);overflow-x:auto;scrollbar-width:none;box-shadow:0 1px 0 var(--line);transition:background-color .6s ease}
+  .sp-tabs::-webkit-scrollbar{display:none}
+  .sp-tabs button{flex:1 0 auto;padding:10px 14px;border:1.5px solid rgba(22,49,63,.18);background:#FFFFFF;color:#16313F;font:700 .82rem/1 var(--font);white-space:nowrap;transition:background-color .3s,color .3s,border-color .3s}
+  .sp-tabs button[aria-selected="true"]{background:var(--navy);border-color:var(--navy);color:#FFFFFF}
+  .sp-carwrap{display:block}
+  .sp-car{display:flex;align-items:flex-start;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;transition:height .45s cubic-bezier(.4,0,.2,1)}
+  .sp-car::-webkit-scrollbar{display:none}
+  .sp-car > .sp-opt{flex:0 0 100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always}
+  #sp-dona .sp-sub-t p{overflow-wrap:anywhere}
+  body:is([data-tone="green"],[data-tone="navy"]) .sp-tabs button{background:transparent;border-color:rgba(255,255,255,.45);color:#FFFFFF}
+  body:is([data-tone="green"],[data-tone="navy"]) .sp-tabs button[aria-selected="true"]{background:#FFFFFF;border-color:#FFFFFF;color:#16313F}
+}
+
+/* ============ Programas en celular: todos los programas a la vista y el filtro en una barra fija ============ */
+@media (max-width:760px){
+  .pshop .pside{position:sticky;top:0;z-index:20;max-height:none;overflow:visible;background:var(--bg);margin-inline:calc(50% - 50vw);padding:10px 0;box-shadow:0 1px 0 var(--line);transition:top .35s cubic-bezier(.22,.7,.2,1)}
+  body:has(header.site:not(.hide)) .pshop .pside{top:var(--inf-top,84px)}
+  .pshop .pside .ps-title{display:none}
+  #pside{flex-direction:row;flex-wrap:nowrap;gap:8px;padding:0 16px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #pside::-webkit-scrollbar{display:none}
+  #pside .ps-g,#pside .ps-sub,#pside .ps-g.open .ps-sub{display:contents}
+  #pside .ps-g .pb-tag,#pside .ps-n,#pside .ps-g .ps-b.ps-main::after{display:none}
+  #pside .ps-all{display:flex}
+  #pside .ps-b,#pside .ps-g .ps-b.ps-main,#pside .ps-b.ps-all,#pside .ps-sub .ps-b{flex:0 0 auto;width:auto;white-space:nowrap;padding:11px 20px;border:1px solid var(--line);font:600 .9rem var(--font);color:var(--heading);gap:8px}
+  #pside .ps-b.ps-main > span{text-decoration:none}
+  #pside .ps-b[aria-pressed="true"],#pside .ps-b.ps-main[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#FFFFFF}
+  #pside .ps-b.ps-main.in{border-color:var(--navy)}
+  .pshop-grid{grid-template-columns:minmax(0,1fr)}
+  .pshop.pm-closed .pmain{display:block}
+  .pshop .pmain{margin-top:6px}
+}
+
+/* ============ Boletines en celular: 2 por fila con portada más baja (tarjetas menos verticales) ============ */
+@media (max-width:760px){
+  .bol-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .bol-cover{aspect-ratio:4/3}
+  .bol-new{left:6px;top:6px;padding:3px 7px;font-size:.56rem}
+  .bol-body{padding:12px 12px 14px;gap:4px}
+  .bol-body h3{font-size:.95rem;line-height:1.22}
+  .bol-body p{font-size:.78rem}
+  .bol-go{font-size:.64rem;gap:8px}
+  .bol-go i{width:28px;height:28px}
+  .bol .bol-body .bol-go{padding-top:8px}
+}
+
+/* ============ Inicio en celular: más video en la portada (texto abajo, velo solo detrás del texto) ============ */
+@media (max-width:760px){
+  #heroSheet.has-photo{min-height:100svh;padding-bottom:30px}
+  #heroSheet .hero-bg::after{background:linear-gradient(0deg,rgba(15,42,56,.94) 0%,rgba(15,42,56,.7) 30%,rgba(15,42,56,0) 58%),linear-gradient(180deg,rgba(15,42,56,.45) 0%,rgba(15,42,56,0) 18%)}
+  main #heroSheet p.hero-lead{font-size:1.12rem;line-height:1.38}
+  #heroSheet .row{margin-top:20px!important;gap:8px}
+  #heroSheet .row .cta{height:48px;padding:0 18px;font-size:.74rem}
+  #heroSheet .hdots{margin-top:20px}
 }

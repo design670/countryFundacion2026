@@ -653,11 +653,17 @@ document.addEventListener("securitypolicyviolation", e => { if(/frame/.test(e.vi
   sec.querySelector(".tlx-viewport").after(dots);
   const btns = [...dots.children];
   const off = el => el.getBoundingClientRect().left - row.getBoundingClientRect().left + row.scrollLeft;
-  let tick = false;
+  let tick = false, cur = 0;
+  /* en celular el alto sigue a la tarjeta visible, así los puntos quedan justo debajo de su texto */
+  const mq = matchMedia("(max-width:760px)");
+  const fit = () => { row.style.height = mq.matches && sec.classList.contains("static") ? items[cur].offsetHeight + 6 + "px" : ""; };
   row.addEventListener("scroll", () => { if(tick) return; tick = true; requestAnimationFrame(() => { tick = false;
     const mid = row.scrollLeft + row.clientWidth / 2; let best = 0, d = Infinity;
     items.forEach((el, i) => { const x = Math.abs(off(el) + el.offsetWidth / 2 - mid); if(x < d){ d = x; best = i; } });
-    btns.forEach((b, i) => b.setAttribute("aria-selected", String(i === best))); }); }, {passive:true});
+    btns.forEach((b, i) => b.setAttribute("aria-selected", String(i === best)));
+    if(best !== cur){ cur = best; fit(); } }); }, {passive:true});
+  items.forEach(el => new ResizeObserver(fit).observe(el));
+  mq.addEventListener("change", fit);
   dots.addEventListener("click", e => { const i = btns.indexOf(e.target.closest("button")); if(i >= 0) row.scrollTo({left: off(items[i]) - (row.clientWidth - items[i].offsetWidth) / 2, behavior:"smooth"}); });
 })();
 
@@ -684,7 +690,8 @@ document.addEventListener("securitypolicyviolation", e => { if(/frame/.test(e.vi
 (function(){
   const side = document.getElementById("pside"); if(!side) return;
   const shop = document.getElementById("pshop"), main = shop.querySelector(".pmain"), home = main.parentNode;
-  const MQ = matchMedia("(max-width: 900px)"), groups = [...side.querySelectorAll(".ps-g")];
+  /* solo en tablet: en celular (≤760px) se ven todos los programas con el filtro en una barra fija */
+  const MQ = matchMedia("(min-width: 761px) and (max-width: 900px)"), groups = [...side.querySelectorAll(".ps-g")];
   let cur = "todos";
   function sync(f){
     cur = f; let openG = null;
@@ -692,6 +699,9 @@ document.addEventListener("securitypolicyviolation", e => { if(/frame/.test(e.vi
       g.classList.toggle("open", on); g.querySelector(".ps-main").setAttribute("aria-expanded", String(on)); if(on) openG = g; });
     if(MQ.matches){ shop.classList.toggle("pm-closed", !openG); if(openG && main.parentNode !== openG) openG.appendChild(main); }
     else { shop.classList.remove("pm-closed"); if(main.parentNode !== home) home.appendChild(main); }
+    /* en la barra del celular, la opción elegida queda a la vista */
+    const on = side.querySelector('.ps-b[aria-pressed="true"]');
+    if(on && side.scrollWidth > side.clientWidth) side.scrollTo({left: on.offsetLeft - 16, behavior: "smooth"});
   }
   const base = setFilter;
   setFilter = function(f, jump){ base(f, jump); sync(f); };
@@ -937,7 +947,7 @@ let toneSections = [];
 function updateTone(){
   const mid = innerHeight * .5;
   let tone = "light";
-  for(const s of toneSections){ if(s.tagName === "FOOTER" || !s.dataset.tone || !s.offsetParent) continue; const r = s.getBoundingClientRect(); if(r.top <= mid){ tone = s.dataset.tone; if(r.bottom > mid) break; } }
+  for(const s of toneSections){ if(s.tagName === "FOOTER" || !s.dataset.tone || !s.offsetParent) continue; const r = s.getBoundingClientRect(); if(r.right <= 1 || r.left >= innerWidth - 1) continue; /* fuera de pantalla en un carrusel */ if(r.top <= mid){ tone = s.dataset.tone; if(r.bottom > mid) break; } }
   /* El cambio al color del footer ocurre cuando ya ocupa más de la mitad de la pantalla, no mientras se lee la sección anterior */
   const foot = document.querySelector("footer.site");
   if(foot && foot.getBoundingClientRect().top <= innerHeight * .4) tone = foot.dataset.tone;
@@ -1107,6 +1117,29 @@ function enhanceSelect(sel){
   sync();
   return sync;
 }
+
+/* ---------- Sé parte: las tres formas de apoyo como carrusel en celular ---------- */
+(function(){
+  const car = document.getElementById("spCar"); if(!car) return;
+  const slides = [...car.querySelectorAll(".sp-opt")], mq = matchMedia("(max-width:760px)");
+  const tabs = document.createElement("div"); tabs.className = "sp-tabs"; tabs.setAttribute("role", "tablist"); tabs.setAttribute("aria-label", "Formas de apoyo");
+  tabs.innerHTML = slides.map((s, i) => '<button type="button" role="tab" aria-selected="' + (i === 0) + '">' + s.querySelector("h2").textContent.trim() + '</button>').join("");
+  car.before(tabs);
+  const btns = [...tabs.children];
+  let cur = 0, tick = false;
+  const fit = () => { car.style.height = mq.matches ? slides[cur].offsetHeight + "px" : ""; };
+  const mark = i => { cur = i; btns.forEach((b, k) => b.setAttribute("aria-selected", String(k === i))); fit(); };
+  car.addEventListener("scrollend", () => updateTone());
+  car.addEventListener("scroll", () => { if(tick) return; tick = true; requestAnimationFrame(() => { tick = false;
+    const i = Math.round(car.scrollLeft / car.clientWidth); if(i !== cur && slides[i]) mark(i); }); }, {passive:true});
+  tabs.addEventListener("click", e => { const i = btns.indexOf(e.target.closest("button")); if(i < 0) return;
+    car.scrollTo({left: i * car.clientWidth, behavior: reduced ? "auto" : "smooth"}); mark(i);
+    const top = car.getBoundingClientRect().top - tabs.getBoundingClientRect().bottom;
+    if(top < 0) window.scrollTo({top: scrollY + top, behavior: reduced ? "auto" : "smooth"}); });
+  new ResizeObserver(fit).observe(slides[0].parentElement);
+  slides.forEach(s => new ResizeObserver(fit).observe(s));
+  mq.addEventListener("change", () => { car.scrollLeft = 0; mark(0); });
+})();
 
 /* ---------- Formas de apoyo y formularios ---------- */
 const WAY_ID = {"Dona":"dona","Sé voluntario":"voluntario","Haz una alianza":"alianza"};

@@ -2108,3 +2108,13 @@ footer.site .fbottom{justify-content:center;text-align:center}
   .stack-row .ptk .ph{max-height:none}
   .stack-row .ptk.ptk-wide .ph{aspect-ratio:4/3}
 }
+
+/* ============ Impacto → Nuestro impacto en celular: cifras de a dos por fila en recuadros blancos (la séptima ocupa todo el ancho) ============ */
+@media (max-width:760px){
+  .istat-wall{margin-top:24px}
+  .istat-rows{grid-template-columns:1fr 1fr;gap:10px}
+  .istat-rows .istat,.istat-rows .istat:nth-child(n+5),.istat-rows .istat + .istat{grid-column:auto;justify-content:center;gap:6px;margin:0!important;padding:20px 12px!important;background:#FFFFFF;border:0!important;box-shadow:0 14px 30px -24px rgba(15,42,56,.45)}
+  .istat-rows .istat:nth-child(odd):last-child{grid-column:1 / -1}
+  .istat-rows .istat-num{font-size:clamp(2rem,9vw,2.6rem)}
+  .istat-rows .istat h3{font-size:.86rem;line-height:1.25}
+}

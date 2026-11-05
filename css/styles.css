@@ -2074,3 +2074,37 @@ footer.site .fbottom{justify-content:center;text-align:center}
   #heroSheet .row .cta{height:48px;padding:0 18px;font-size:.74rem}
   #heroSheet .hdots{margin-top:20px}
 }
+
+/* ============ Sé parte → Dona: tres fotos que se turnan solas ============ */
+.sp-fade img{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease}
+.sp-fade img.on{opacity:1}
+.sp-fade .sp-dots{bottom:calc(-1 * clamp(6px,.6vw,10px) - 44px);z-index:2}
+.sp-fade{margin-bottom:48px}
+
+/* ============ Impacto → Resultados destacados: tres fotos que se turnan, con círculos debajo ============ */
+.gen-fade img{opacity:0;transition:opacity 1.1s ease}
+.gen-fade img.on{opacity:1}
+.fade-box .sp-dots{bottom:-54px;z-index:2}
+.fade-box{margin-bottom:56px}
+.fade-box .sp-dots button{border-radius:50%!important}
+/* fotos que se turnan: la nueva aparece encima y la anterior sigue sólida debajo hasta que termina */
+.sp-fade img,.gen-fade img{z-index:0;transition:opacity 1.1s ease}
+.sp-fade img.prev,.gen-fade img.prev{opacity:1;z-index:1;transition:none}
+.sp-fade img.on,.gen-fade img.on{opacity:1;z-index:2}
+
+/* ============ Historias que nos inspiran: la foto de la beca es horizontal, así se ven las tres personas completas ============ */
+.ptk.ptk-wide{width:clamp(240px,32vw,500px);z-index:2}
+.ptk.ptk-wide .ph{aspect-ratio:3/2}
+@media (max-width:700px){.ptk.ptk-wide{width:62vw}}
+@media (max-width:760px){.stack-row .ptk.ptk-wide{align-self:center}.stack-row .ptk.ptk-wide .ph{aspect-ratio:4/3}}
+/* Historias que nos inspiran con 3 fotos: grandes, montadas y centradas (computador y tablet).
+   El tamaño sale del ancho y del alto de la pantalla, y la caja siempre mide lo mismo que la foto
+   (antes un tope de altura encogía la foto dentro de su caja y la dejaba corrida a la izquierda). */
+@media (min-width:701px){
+  .stack-row{--pw:min(30vw,500px,46vh);--ww:min(42vw,720px,62vh)}
+  .stack-row .ptk{width:var(--pw)}
+  .stack-row .ptk.ptk-wide{width:var(--ww)}
+  .stack-row .ptk + .ptk{margin-left:calc(var(--pw) * -.38)}
+  .stack-row .ptk .ph{max-height:none}
+  .stack-row .ptk.ptk-wide .ph{aspect-ratio:4/3}
+}

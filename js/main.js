@@ -39,7 +39,10 @@ function genArt(seed, palName){
   </svg>`;
 }
 document.querySelectorAll(".gen[data-seed]").forEach(el => {
-  if(el.dataset.img){ const im = new Image(); im.src = el.dataset.img; im.alt = el.dataset.alt || ""; im.decoding = "async"; el.prepend(im); }
+  /* data-imgs="a|b|c": varias fotos que se turnan solas (ver "fotos que se turnan") */
+  if(el.dataset.imgs){ el.classList.add("gen-fade");
+    el.dataset.imgs.split("|").forEach((src, i) => { const im = new Image(); im.src = src; im.alt = i ? "" : (el.dataset.alt || ""); im.decoding = "async"; if(!i) im.className = "on"; el.append(im); }); }
+  else if(el.dataset.img){ const im = new Image(); im.src = el.dataset.img; im.alt = el.dataset.alt || ""; im.decoding = "async"; el.prepend(im); }
   else el.insertAdjacentHTML("afterbegin", genArt(+el.dataset.seed, el.dataset.pal));
 });
 
@@ -1001,7 +1004,8 @@ function updateParallax(){
     const r = el.getBoundingClientRect();
     if(r.bottom < 0 || r.top > innerHeight) continue;
     const k = ((r.top + r.height/2) - innerHeight/2) / innerHeight;
-    const svg = el.querySelector("svg, img, video"); if(svg) svg.style.transform = `translateY(${(k * +el.dataset.parallax * 100).toFixed(2)}px)`;
+    const ms = el.classList.contains("gen-fade") ? el.querySelectorAll("img") : [el.querySelector("svg, img, video")];
+    ms.forEach(m => { if(m) m.style.transform = `translateY(${(k * +el.dataset.parallax * 100).toFixed(2)}px)`; });
   }
 }
 
@@ -1118,6 +1122,30 @@ function enhanceSelect(sel){
   sync();
   return sync;
 }
+
+/* ---------- Fotos que se turnan (Sé parte → Dona, Impacto → Resultados destacados): cada pocos segundos mientras están a la vista, con círculos para cambiar a mano ---------- */
+(function(){
+  /* en las fotos con marco de pincel los círculos van debajo del marco (la foto recorta lo que sale de ella) */
+  document.querySelectorAll(".gen-fade").forEach(g => {
+    const n = g.querySelectorAll("img").length, box = g.closest(".brush-frame") || g;
+    box.classList.add("fade-box");
+    box.insertAdjacentHTML("beforeend", '<div class="islider-dots sp-dots" role="tablist" aria-label="Elegir foto">' +
+      Array.from({length:n}, (_, i) => '<button type="button" role="tab" aria-selected="' + (i === 0) + '" aria-label="Foto ' + (i + 1) + '"></button>').join("") + '</div>');
+  });
+  document.querySelectorAll(".sp-fade, .fade-box").forEach(fig => {
+    const imgs = [...fig.querySelectorAll("img")], dots = [...fig.querySelectorAll(".sp-dots button")]; if(imgs.length < 2) return;
+    let i = 0, timer = null, seen = false;
+    /* la foto que sale se queda debajo, sin transparencia, mientras la nueva aparece encima (así no se ve el fondo blanco) */
+    const go = n => { const prev = i; i = (n + imgs.length) % imgs.length; if(i === prev) return;
+      imgs.forEach((im, k) => { im.classList.toggle("on", k === i); im.classList.toggle("prev", k === prev); });
+      setTimeout(() => imgs[prev].classList.remove("prev"), 1200);
+      dots.forEach((d, k) => d.setAttribute("aria-selected", String(k === i))); };
+    const play = () => { clearInterval(timer); if(seen && !reduced) timer = setInterval(() => go(i + 1), 4500); };
+    /* los círculos cambian la foto a mano y el conteo vuelve a empezar */
+    dots.forEach((d, k) => d.addEventListener("click", () => { go(k); play(); }));
+    new IntersectionObserver(es => es.forEach(e => { seen = e.isIntersecting; play(); })).observe(fig);
+  });
+})();
 
 /* ---------- Sé parte: las tres formas de apoyo como carrusel en celular ---------- */
 (function(){
